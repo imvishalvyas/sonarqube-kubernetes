@@ -29,13 +29,13 @@ kubectl apply -f secret.yaml
 ## 4. Create PVC storage.
 We need to create 2 PVCs since SonarQube uses two locations to store data /opt/sonarqube/data/ and /opt/sonarqube/extensions/.
 
-PVC for Sonar’s data directory
+- PVC for Sonar’s data directory
 
 ```
 kubectl apply -f data-pvc.yaml 
 ```
 
-PVC for Sonar’s extensions directory
+- PVC for Sonar’s extensions directory
 ```
 kubectl apply -f extension-pvc.yaml
 ```
