@@ -1,13 +1,23 @@
 ### Sonarqube deployment on Kubernetes GCP.
 
+# Prerequisites
+
+1. Bash/PowerShell terminal with kubectl installed
+
+2. PostgreSQL database to store SonarQube’s data
+
+3. Kubernetes cluster
+
+
 ## 1. Create Postgress DB GCP Cloud SQL.
 
 [Click here](https://console.cloud.google.com/sql) to create postgress db.
 
 
 ## 2. Generate base64 encoded password.
+Create a Secret to store PostgreSQL password, Kubernetes has a built-in capability to store secrets. To create a secret you need to base64 encode a secret value.
 ```
-echo -n 'yourpasswpod' | base64
+echo -n 'yourpassword' | base64
 ```
 Copy the password and put it in the secret file.
 
@@ -17,17 +27,21 @@ kubectl apply -f secret.yaml
 ```
 
 ## 4. Create PVC storage.
-Sonarkube store extension and data. So create 2 pvc.
+We need to create 2 PVCs since SonarQube uses two locations to store data /opt/sonarqube/data/ and /opt/sonarqube/extensions/.
+
+PVC for Sonar’s data directory
 
 ```
 kubectl apply -f data-pvc.yaml 
 ```
 
+PVC for Sonar’s extensions directory
 ```
 kubectl apply -f extension-pvc.yaml
 ```
 
 ## 5. Apply deployment file.
+After creating PVCs and Postgres secret we are ready to deploy using the following YAML file.
 ```
 kubectl apply -f deployment.yaml
 ```
@@ -119,5 +133,24 @@ INFO: Final Memory: 19M/296M
 ### And the project's code quality report will now be on the SonarQube dashboard.
 
 
+# Gitlab integration with SonarQube.
+As with sonnar-scanner, you will need to have a sonar.properties file in your project's root folder.
+To run the scan, add the following to your gitlab-ci.yml
 
+```
 
+analysis:
+  image: emeraldsquad/sonar-scanner
+  stage: analysis
+  artifacts:
+  script: sonar-scanner -Dsonar.host.url=$SONAR_URL -Dsonar.login=$SONAR_TOKEN
+```
+
+### Variables : 
+
+```
+SONAR_URL=URL
+```
+```
+SONAR_TOKEN=YOURTOKEN
+```
