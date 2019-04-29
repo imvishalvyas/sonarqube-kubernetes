@@ -38,7 +38,7 @@ kubectl apply -f deployment.yaml
 kubectl apply -f service.yaml
 ```
 
-### You can access it by URL. Default username and password will be admin/admin. Please change it after login.
+You can access it by URL. Default username and password will be admin/admin. Please change it after login.
 
 
 ## Plugin Installation.
