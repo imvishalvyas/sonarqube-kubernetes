@@ -3,11 +3,11 @@ kind: Service
 metadata:
   name: sonarqube-service
 spec:
+  type: LoadBalancer
+  selector:
+    app: products
   ports:
   - protocol: TCP
     port: 9090
     targetPort: 9090
-  selector:
-    app: sonarqube-service
-  type: ClusterIP
 
