@@ -2,11 +2,11 @@
 
 # Prerequisites
 
-1. Bash/PowerShell terminal with kubectl installed
+- Bash/PowerShell terminal with kubectl installed
 
-2. PostgreSQL database to store SonarQube’s data
+- PostgreSQL database to store SonarQube’s data
 
-3. Kubernetes cluster
+- Kubernetes cluster
 
 
 ## 1. Create Postgress DB GCP Cloud SQL.
