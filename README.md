@@ -137,13 +137,28 @@ INFO: Final Memory: 19M/296M
 As with sonnar-scanner, you will need to have a sonar.properties file in your project's root folder.
 To run the scan, add the following to your gitlab-ci.yml
 
+`For preview mode` :
 ```
-
-analysis:
+preview_mode:
   image: emeraldsquad/sonar-scanner
   stage: analysis
   artifacts:
-  script: sonar-scanner -Dsonar.host.url=$SONAR_URL -Dsonar.login=$SONAR_TOKEN
+  script: sonar-scanner -Dsonar.host.url=$SONAR_URL -Dsonar.login=$SONAR_TOKEN -Dsonar.analysis.mode=preview -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME -Dsonar.gitlab.project_id=$CI_PROJECT_ID -Dsonar.gitlab.unique_issue_per_inline=true
+
+  only:
+    - master
+```
+
+`For analysis mode` : 
+```
+analysis_mode:
+  image: emeraldsquad/sonar-scanner
+  stage: analysis
+  artifacts:
+  script: sonar-scanner -Dsonar.host.url=$SONAR_URL -Dsonar.login=$SONAR_TOKEN -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME -Dsonar.gitlab.project_id=$CI_PROJECT_ID -Dsonar.gitlab.unique_issue_per_inline=true
+
+  only:
+    - master
 ```
 
 ### Variables : 
