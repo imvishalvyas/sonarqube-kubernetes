@@ -1,0 +1,50 @@
+image: node:carbon
+
+stages:
+  - analysis
+  - build
+  - test
+  - deploy
+  
+
+preview_mode:
+  image: emeraldsquad/sonar-scanner
+  stage: analysis
+  artifacts:
+  script: sonar-scanner -Dsonar.host.url=$SONAR_URL -Dsonar.login=$SONAR_TOKEN -Dsonar.analysis.mode=preview -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME -Dsonar.gitlab.project_id=$CI_PROJECT_ID -Dsonar.gitlab.unique_issue_per_inline=true
+
+  only:
+    - master
+
+analysis_mode:
+  image: emeraldsquad/sonar-scanner
+  stage: analysis
+  artifacts:
+  script: sonar-scanner -Dsonar.host.url=$SONAR_URL -Dsonar.login=$SONAR_TOKEN -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME -Dsonar.gitlab.project_id=$CI_PROJECT_ID -Dsonar.gitlab.unique_issue_per_inline=true
+
+  only:
+    - master
+
+
+cache:
+  paths:
+    - node_modules/
+
+install_dependencies:
+  stage: build
+  script:
+    - npm install
+  artifacts:
+    paths:
+      - node_modules/
+
+
+test_with_lab:
+  stage: test
+  script: npm test 
+
+
+deploy_package:
+  stage: deploy
+  script:
+   - npm build
